@@ -1,9 +1,9 @@
 ## 请在此文件夹存放爬虫导出的csv
 
-# 爬虫脚本：extract_chat_from_forum.py
+# 爬虫脚本：backend/src/scripts/extract_chat_from_forum.py
 使用方法：
-1. 用IDE打开该脚本，修改"BASE_URL"的值，将需要的聊天记录备份贴网址复制进去
-2. 修改基本路径"BASE_DIR"为后端文件夹backend和文档输出路径"INPUT_DIR"内的...为data，即：INPUT_DIR = os.path.join(BASE_DIR, "...") （推荐）
-3. 保存并使用IDE运行
+1. 正常部署并运行前后端
+2. 在页面右上角点击“爬虫脚本”
+3. 输入聊天记录备份贴的网址，点击确认
 
-稍等片刻，爬虫会自动爬取对应网址备份的聊天记录并且生成csv文件
+稍等片刻，爬虫会自动爬取对应网址备份的聊天记录并且生成csv文件，存放在该文件夹中
