@@ -1,4 +1,4 @@
-## Chat-PDF-Export（Next.js + Express + AI 摘要 + 爬虫集成）
+## Chat-PDF-Export（Next.js + Express + AI 摘要集成）
 
 本项目用于 导出 六度世界（6do.world）聊天区 的聊天记录为 PDF，并支持：
 
@@ -18,25 +18,14 @@
 若用户 输入摘要 → 作为最终摘要写入 PDF
 若 没有 API KEY → 自动切换到 “本地降级摘要”（简单文本摘要，不报错）
 
-🔹 2. 一键爬虫（Crawler）
-集成爬虫脚本：
-extract_chat_from_forum.py
-前端点击 “启动爬虫”，输入帖子 URL，后端自动：
-调用 Python 脚本爬取帖子所有楼层
-自动探测最大楼层（含 2 段智能探测算法）
-多线程抓取 + 补抓
-清洗消息
-将 CSV 写入 backend/data/
-生成的 CSV 将自动被导出系统调用。
-
-🔹 3. 聊天记录清洗与合并（后端算法）
+🔹 2. 聊天记录清洗与合并（后端算法）
 清除重复用户名 + 冒号前缀
 清理系统提示文本
 去除“裸用户名紧跟正文”
 相邻消息 45 秒内合并
 生成最终结构化聊天记录，用于 PDF 导出。
 
-🔹 4. PDF 导出（新版）
+🔹 3. PDF 导出（新版）
 首页包含：
 标题区域（频道 + 用户 + 日期范围）
 **摘要区：根据来源使用不同标题：
@@ -53,25 +42,23 @@ chat-pdf-export-nextjs/
 │   ├── src/
 │   │   ├── routes/
 │   │   │   ├── export.js
-│   │   │   ├── digest.js
-│   │   │   └── crawl.js          ← 爬虫 API
+│   │   │   └── digest.js
 │   │   ├── utils/
 │   │   │   ├── csvLoader.js
 │   │   │   ├── PDFGenerator.js   ← 新版摘要标题逻辑
 │   │   │   ├── digestService.js
 │   │   │   └── llmClient.js
-│   │   ├── scripts/
-│   │   │   └── extract_chat_from_forum.py  ← 爬虫脚本
+│   │   ├── scripts
 │   │   ├── config.js
 │   │   └── server.js
-│   ├── data/                      ← CSV 存放处（爬虫与导出共用）
+│   ├── data/                      ← CSV 存放处（导出用）
 │   ├── exports/
 │   ├── uploads/
 │   ├── fonts/
 │   └── .env
 └── frontend/
     ├── app/
-    │   ├── export/page.tsx       ← 含爬虫弹窗按钮
+    │   ├── export/page.tsx
     ├── components/
     │   ├── ExportModal.tsx       ← 新版摘要逻辑
     │   ├── CrawlerModal.tsx      ← 输入 URL 弹窗
@@ -122,30 +109,6 @@ npm run dev
 
 说明 AI 功能自动降级，不影响导出。
 
-
-## 🐍 爬虫功能
-
-# 前端触发流程
-页面 /export 右上角按钮：
-启动爬虫
-
-弹窗要求输入：
-https://6do.world/t/topic/xxxxx
-
-点击开始 → 调用后端：
-POST /api/crawl
-
-后端启动 Python：
-python extract_chat_from_forum.py "<URL>"
-
-输出 CSV 到：
-backend/data/<帖子标题提取的规范化名称>.csv
-
-文件命名遵循原脚本：
-优先匹配：六度世界聊天区YYYYMM
-否则取标题前 20 字清洗
-自动去 emoji、符号
-💡 与原脚本行为完全一致。
 
 ## 🖨️ PDF 导出接口
 # POST /api/export/pdf
@@ -230,6 +193,4 @@ OPENAI_BASE_URL=
 
 ## 🙌 致谢
 
-
 Next.js, Express, pdfkit, TailwindCSS, Noto Sans SC, BeautifulSoup4
-
